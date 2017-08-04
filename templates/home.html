@@ -1,0 +1,32 @@
+ {% extends "base.html" %} 
+ {% block content %}
+<div class="posts">
+	{% for post in post_list %}
+	<section class="post">
+		<header class="post-header">
+			<h1 class="post-title"><a href="{% url "show" id=post.id %}">{{ post.name}}</a></h1>
+		
+			<table>
+				<tr>
+					<td class="post-meta">Developer:</td>
+					<td class="post-meta"><a class="post-author" href="#">&nbsp;{{ post.developer }}</a></td>
+				</tr>
+				<tr>
+					<td class="post-meta">Description:</td>
+					<td class="post-meta">&nbsp;{{ post.description }}</td>
+				</tr>
+				<tr>
+					<td class="post-meta">Created at:</td>
+					<td class="post-meta">&nbsp;{{ post.created_at }}</td>
+				</tr>
+				<tr>
+					<td class="post-meta">PythonFile:</td>
+					<td class="post-meta">&nbsp;{{ post.crawlerfile }}</td>
+				</tr>
+			</table>
+		</header>
+	</section>
+	{% endfor %}
+	
+</div>
+{% endblock %}

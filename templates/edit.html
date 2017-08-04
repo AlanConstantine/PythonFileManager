@@ -1,0 +1,82 @@
+
+ {% extends "base.html" %} 
+ {% load static %}
+
+ {% block content %}
+<div class="posts">
+	<form id='post_form' action="/crawlers/{{ post.id }}/update" method="post" enctype="multipart/form-data">
+	<section class="post">
+		<header class="post-header">
+			<!--<h2 class="post-title">{{ post.name }}</h2>-->
+			{% csrf_token %}
+			<table>
+				<tr>
+					<td class="post-meta">ProjectName:</td>
+					<!--<td class="post-meta"><a class="post-author" href="#">&nbsp;{{ post.developer }}</a></td>-->
+					<td class="post-meta">&nbsp;<input maxlength="100" type="text" value="{{ post.name }}" name="projectname"/></td>
+				</tr>
+				<tr>
+					<td class="post-meta">Developer:</td>
+					<!--<td class="post-meta"><a class="post-author" href="#">&nbsp;{{ post.developer }}</a></td>-->
+					<td class="post-meta">&nbsp;<input maxlength="100" type="text" value="{{ post.developer }}" name="developer"/></td>
+				</tr>
+				<tr>
+					<td class="post-meta" style="vertical-align:top;">Description:</td>
+					<td class="post-meta">&nbsp;<textarea type="text" style="width:300px;height:90px;" name="description">{{ post.description }}</textarea></td>
+				</tr>
+				<tr>
+					<td class="post-meta">Updated at:</td>
+					<td id="date" class="post-meta"></td>
+					<script>;
+						var data=new Date().toLocaleString()
+						document.getElementById("date").innerHTML="&nbsp;"+data;
+					</script>
+				</tr>
+				<tr>
+					<td class="post-meta">PythonFile:</td>
+					<td class="post-meta">&nbsp;<input value="{{ filename }}" name="crawlerfile"/></td>
+				</tr>    
+			</table>
+			<div id="container" style="width:800px;height:500px;border:1px solid grey"></div>		
+			<script src="{% static "node_modules/monaco-editor/min/vs/loader.js" %}" ></script>
+
+			<script>
+				require.config({ paths: { 'vs': '{% static "node_modules/monaco-editor/min/vs" %}' }});
+				var editor;
+				require(
+					['vs/editor/editor.main'], 
+					function() {
+						var content='{{ content }}';
+						var subcontent=content.replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&gt;/g,">").replace(/&amp;/g,"&").replace(/&lt;/g,"<");
+						var contentlen=subcontent.length;
+						editor = monaco.editor.create(document.getElementById('container'), 
+						{
+							value: subcontent.substring(1,contentlen-1),
+							language: 'python',
+							theme: 'vs-dark',
+						});
+					});
+//					console.log()
+					
+					function save() {
+						var value = editor.getValue();
+						document.getElementById('a').value=value;
+						document.getElementById('post_form').submit();
+					}
+			</script>
+			
+			<textarea id="a" name='content' type='text' value="" style="display: none"></textarea>
+		</header>
+			<div><div class="pure-menu pure-menu-horizontal pure-menu-open">
+				<ul>
+					<li><a class="post-description" onclick="save()">Update</a></li>
+					<li><a class="post-description" href="/crawlers/{{ post.id }}/">Cancel</a></li>
+				</ul>
+			</div>
+		</div>
+		
+	</section>
+	</form>
+</div>
+
+{% endblock %}

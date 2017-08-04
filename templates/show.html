@@ -1,0 +1,72 @@
+
+ {% extends "base.html" %} 
+ {% load static %}
+
+ {% block content %}
+<div class="posts">
+	<section class="post">
+		<header class="post-header">
+			<h2 class="post-title">{{ post.name }}</h2>
+			<table>
+				<tr>
+					<td class="post-meta">Developer:</td>
+					<td class="post-meta"><a class="post-author" href="#">&nbsp;{{ post.developer }}</a></td>
+				</tr>
+				<tr>
+					<td class="post-meta">Description:</td>
+					<td class="post-meta">&nbsp;{{ post.description }}</td>
+				</tr>
+				<tr>
+					<td class="post-meta">Created at:</td>
+					<td class="post-meta">&nbsp;{{ post.created_at }}</td>
+				</tr>
+				<tr>
+					<td class="post-meta">PythonFile:</td>
+					<td class="post-meta">&nbsp;{{ filename }}</td>
+				</tr>    
+			</table>
+			<div id="container" style="width:800px;height:500px;border:1px solid grey"></div>		
+			<script src="{% static "node_modules/monaco-editor/min/vs/loader.js" %}" ></script>
+
+			<script>
+				require.config({ paths: { 'vs': '{% static "node_modules/monaco-editor/min/vs" %}' }});
+				require(
+					['vs/editor/editor.main'], 
+					function() {
+						var content='{{ content }}';
+						var subcontent=content.replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&gt;/g,">").replace(/&amp;/g,"&").replace(/&lt;/g,"<");
+						var contentlen=subcontent.length;
+						var editor = monaco.editor.create(document.getElementById('container'), 
+						{
+							value: subcontent.substring(1,contentlen-1),
+							language: 'python',
+							theme: 'vs-dark',
+						});
+					});
+					function dele(){
+						var conf=confirm("Are you sure?");
+						if(conf==true)
+						{
+							location.href="/crawlers/{{ post.id }}/delete/";
+						}
+						else
+						{
+							location.href="/crawlers/{{ post.id }}/";
+						}
+					}
+			</script>
+			
+		</header>
+		
+			<div><div class="pure-menu pure-menu-horizontal pure-menu-open">
+				<ul>
+					<li><a class="post-description" href="/crawlers/{{ post.id }}/edit/">Edit</a></li>
+					<li><a class="post-description" onclick="dele()">Delete</a></li>
+				</ul>
+			</div>
+			
+		</div>
+	</section>
+</div>
+
+{% endblock %}

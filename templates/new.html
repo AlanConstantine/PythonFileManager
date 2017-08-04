@@ -1,0 +1,62 @@
+ {% extends "base.html" %} 
+ {% block content %}
+<div class="posts">
+	<form id="post_form" action="create" method="post" enctype="multipart/form-data">
+	<section class="post">
+		<header class="post-header">
+			
+			{% csrf_token %}
+			<table>
+				<tr>
+					<td class="post-meta">ProjectName:</td>
+					<td class="post-meta">&nbsp;<input maxlength="100" type="text" name="projectname"></td>
+				</tr>
+				<tr>
+					<td class="post-meta">Developer:</td>
+					<td class="post-meta">&nbsp;<input maxlength="50" type="text" name="developer"></td>
+				</tr>
+				<tr>
+					<td class="post-meta" style="vertical-align:top;">Description:</td>
+					<td class="post-meta">&nbsp;<textarea type="text" style="width:300px;height:90px;" name="description"></textarea></td>
+				</tr>
+				<tr>
+					<td class="post-meta">Created at:</td>
+					<td id="demo" class="post-meta"></td>
+					<script>;
+						var data=new Date().toLocaleString()
+						document.getElementById("demo").innerHTML="&nbsp;"+data;
+
+						function save(){
+						document.getElementById('post_form').submit();
+					}
+					</script>
+				</tr>
+				<tr>
+					<td class="post-meta">PythonFile:</td>
+					<!--<td class="post-meta">&nbsp;<button class="post-meta" onclick="">Upload</button></td>-->
+					<td><input type="file" class="post-meta" name="crawlerfile" required="" id="id_crawlerfile"></td>
+				</tr>
+        				
+			</table>
+			
+			
+		</header>
+		
+
+
+	
+		<br>
+		<div>
+			<div class="pure-menu pure-menu-horizontal pure-menu-open">
+				<ul>
+					<li><a class="post-description" onclick="save()">Create</a></li>
+					<!-- <li><input class="post-description" type="button" onclick="back()" value="Cancel" /></li> -->
+					<li><a class="post-description" href="/crawlers/">Cancel</a></li>
+				</ul>
+			</div>
+		</div>
+	</section>
+	</form>
+</div>
+
+{% endblock %}
